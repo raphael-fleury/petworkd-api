@@ -1,7 +1,16 @@
+import mongo from "./connections/mongo";
 import { Elysia } from "elysia";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+mongo.connect("example_company")
+    .then(() => console.log("Connected to mongo"))
+    .catch((error) => 
+        console.error("Error on connecting to Mongo\n" + error.message)
+    )
+
+const app = new Elysia()
+    .get("/", () => "Hello Elysia")
+    .listen(3000);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
