@@ -12,6 +12,9 @@ export default class Veterinarian {
 
     @prop({required: true})
     public phone!: string
+
+    @prop()
+    public deletedAt?: string
 }
 
 export const VeterinarianModel = getModelForClass(Veterinarian)
