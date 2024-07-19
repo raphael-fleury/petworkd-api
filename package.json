@@ -8,6 +8,7 @@
   "dependencies": {
     "@typegoose/typegoose": "^12.6.0",
     "elysia": "latest",
+    "moment": "^2.30.1",
     "mongoose": "^8.5.1"
   },
   "devDependencies": {
