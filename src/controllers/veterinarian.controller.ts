@@ -1,34 +1,24 @@
 import Elysia from "elysia";
-import moment from "moment";
-import { VeterinarianModel } from "../models/veterinarian.model";
 import { postVeterinarianSchema, putVeterinarianSchema } from "../dto/veterinarian.dto";
 import { getByIdSchema } from "../dto";
+import { VeterinarianService } from "../services/veterinarian.service";
 
 export const veterinarianController = new Elysia({prefix: "/veterinarians"})
-    .get('/', async () =>
-        await VeterinarianModel.find({deletedAt: undefined}).lean()
-    )
-    .get('/:id', async ({params, error}) =>
-        await VeterinarianModel.findOne(
-            {_id: params.id, deletedAt: undefined}
-        ).lean() ?? error(404, {message: "Not Found"}),
+    .decorate('service', new VeterinarianService())
+    .get('/', async ({service}) => await service.findAll())
+    .get('/:id', async ({service, params, error}) =>
+        await service.findById(params.id) ?? error(404, {message: "Not Found"}),
         getByIdSchema
     )
-    .post('/', async ({body}) =>
-        (await VeterinarianModel.create(body)).toObject(),
+    .post('/', async ({service, body}) =>
+        await service.create(body),
         postVeterinarianSchema
     )
-    .put('/:id', async ({params, body, error}) =>
-        await VeterinarianModel.findOneAndUpdate(
-            {_id: params.id, deletedAt: undefined}, body, {new: true}
-        ).lean()
-            ?? error(404, {message: "Not Found"}),
+    .put('/:id', async ({service, params, body, error}) =>
+        await service.update(params.id, body) ?? error(404, {message: "Not Found"}),
         putVeterinarianSchema
     )
-    .delete('/:id', async ({params, error}) =>
-        await VeterinarianModel.findOneAndUpdate(
-            {_id: params.id, deletedAt: undefined},
-            {deletedAt: moment().format()}
-        ).lean() ?? error(404, {message: "Not Found"}),
+    .delete('/:id', async ({service, params, error}) =>
+        await service.delete(params.id) ?? error(404, {message: "Not Found"}),
         getByIdSchema
     )
