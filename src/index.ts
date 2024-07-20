@@ -1,5 +1,7 @@
 import mongo from "./connections/mongo";
 import { Elysia } from "elysia";
+import { veterinarianController } from "./controllers/veterinarian.controller";
+import swagger from "@elysiajs/swagger";
 
 mongo.connect("example_company")
     .then(() => console.log("Connected to mongo"))
@@ -8,7 +10,8 @@ mongo.connect("example_company")
     )
 
 const app = new Elysia()
-    .get("/", () => "Hello Elysia")
+    .use(swagger())
+    .use(veterinarianController)
     .listen(3000);
 
 console.log(
