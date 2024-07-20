@@ -1,5 +1,8 @@
-import { getModelForClass, prop } from "@typegoose/typegoose"
+import { getModelForClass, modelOptions, prop } from "@typegoose/typegoose"
 
+@modelOptions({ schemaOptions: {
+    versionKey: false
+}})
 export class Veterinarian {
     @prop({required: true})
     public name!: string
