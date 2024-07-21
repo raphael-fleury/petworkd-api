@@ -20,4 +20,6 @@ export class Veterinarian {
     public deletedAt?: string
 }
 
+export type VeterinarianWithId = Veterinarian & {id: string}
+
 export const VeterinarianModel = getModelForClass(Veterinarian)

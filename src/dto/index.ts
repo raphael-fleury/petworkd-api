@@ -2,6 +2,6 @@ import { t } from "elysia"
 
 export const paramsWithIdDto = t.Object({ id: t.String() })
 
-export const getByIdSchema = {
-    params: paramsWithIdDto
-}
+export const notFoundDto = t.Object({
+    message: t.Literal("Not found")
+})
