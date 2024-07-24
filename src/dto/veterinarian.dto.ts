@@ -1,10 +1,10 @@
 import { t } from "elysia"
-import { notFoundDto } from "."
+import { addressDto, notFoundDto } from "."
 
 export const veterinarianDto = t.Object({
     name: t.String(),
     email: t.String({format: "email"}),
-    address: t.String(),
+    address: addressDto,
     phone: t.String()
 })
 
