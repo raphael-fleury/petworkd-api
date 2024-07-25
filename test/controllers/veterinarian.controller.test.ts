@@ -11,7 +11,14 @@ function createRandomVeterinarian() {
         id: faker.database.mongodbObjectId(),
         name: faker.person.fullName(),
         email: faker.internet.email(),
-        address: faker.location.streetAddress(),
+        address: {
+            country: faker.location.country(),
+            postalCode: faker.location.zipCode(),
+            street: faker.location.street(),
+            number: faker.number.int({min: 1}),
+            city: faker.location.city(),
+            state: faker.location.state()
+        },
         phone: faker.phone.number()
     }
 }
