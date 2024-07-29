@@ -9,9 +9,20 @@ function sanitize<T extends {_id: Types.ObjectId}>(obj: T | null) {
 }
 
 export class VeterinarianService {
-    async findAll() {
-        const vets = await VeterinarianModel.find({deletedAt: undefined}).lean()
-        return vets.map(sanitize) as VeterinarianWithId[]
+    async find(skip = 0, limit = 10) {
+        const vets = await VeterinarianModel
+            .find({deletedAt: undefined}).sort({name: "asc"})
+            .skip(skip).limit(limit).lean()
+
+        const total = await VeterinarianModel
+            .countDocuments({deletedAt: undefined})
+
+        const count = vets.length
+        const hasNext = count + skip < total
+        return {
+            pagination: { skipped: skip, count, total, hasNext },
+            results: vets.map(sanitize) as VeterinarianWithId[]
+        }
     }
 
     async findById(id: string) {

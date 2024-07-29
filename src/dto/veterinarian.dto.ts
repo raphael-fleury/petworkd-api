@@ -1,5 +1,5 @@
 import { t } from "elysia"
-import { addressDto, notFoundDto, validationErrorDto } from "."
+import { addressDto, notFoundDto, paginationDto, validationErrorDto } from "."
 
 export const veterinarianDto = t.Object({
     name: t.String(),
@@ -10,13 +10,18 @@ export const veterinarianDto = t.Object({
 
 export const veterinarianArrayDto = t.Array(veterinarianDto)
 
+export const veterinariansPageDto = t.Object({
+    pagination: paginationDto,
+    results: veterinarianArrayDto
+})
+
 export const veterinarianWithIdDto = t.Composite([
     veterinarianDto,
     t.Object({id: t.String()})
 ])
 
 export const getVeterinariansResponseDto = {
-    200: veterinarianArrayDto
+    200: veterinariansPageDto
 }
 
 export const getVeterinarianByIdResponseDto = {

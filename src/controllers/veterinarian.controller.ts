@@ -4,8 +4,8 @@ import { deleteVeterinarianByIdSchema, getAllVeterinariansSchema, getVeterinaria
 
 export const veterinarianController = new Elysia({prefix: "/veterinarians"})
     .decorate('service', veterinarianService)
-    .get('/', async ({service}) =>
-        await service.findAll(),
+    .get('/', async ({service, query}) =>
+        await service.find(query.skip, query.limit),
         getAllVeterinariansSchema
     )
     .post('/', async ({service, body, set}) => {

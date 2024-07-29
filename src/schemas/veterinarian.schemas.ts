@@ -1,7 +1,8 @@
-import { paramsWithIdDto } from "../dto"
+import { pageQueryDto, paramsWithIdDto } from "../dto"
 import { getVeterinarianByIdResponseDto, getVeterinariansResponseDto, postVeterinarianResponseDto, putVeterinarianResponseDto, veterinarianDto } from "../dto/veterinarian.dto"
 
 export const getAllVeterinariansSchema = {
+    query: pageQueryDto,
     response: getVeterinariansResponseDto
 }
 
@@ -21,4 +22,4 @@ export const putVeterinarianSchema = {
     response: putVeterinarianResponseDto
 }
 
-export const deleteVeterinarianByIdSchema =  getVeterinarianByIdSchema
+export const deleteVeterinarianByIdSchema = getVeterinarianByIdSchema
