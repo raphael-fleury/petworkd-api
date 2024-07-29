@@ -1,5 +1,5 @@
 import { t } from "elysia"
-import { addressDto, notFoundDto } from "."
+import { addressDto, notFoundDto, validationErrorDto } from "."
 
 export const veterinarianDto = t.Object({
     name: t.String(),
@@ -26,11 +26,11 @@ export const getVeterinarianByIdResponseDto = {
 
 export const postVeterinarianResponseDto = {
     201: veterinarianWithIdDto,
-    // 422:
+    422: validationErrorDto
 }
 
 export const putVeterinarianResponseDto = {
     201: veterinarianWithIdDto,
     404: notFoundDto,
-    // 422:
+    422: validationErrorDto
 }
