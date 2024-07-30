@@ -1,6 +1,6 @@
 import Elysia from "elysia";
 import veterinarianService from "../services/veterinarian.service";
-import { deleteVeterinarianByIdSchema, getAllVeterinariansSchema, getVeterinarianByIdSchema, postVeterinarianSchema, putVeterinarianSchema } from "../schemas/veterinarian.schemas";
+import { deleteVeterinarianByIdSchema, getAllVeterinariansSchema, getVeterinarianByIdSchema, patchVeterinarianSchema, postVeterinarianSchema, putVeterinarianSchema } from "../schemas/veterinarian.schemas";
 
 export const veterinarianController = new Elysia({prefix: "/veterinarians"})
     .decorate('service', veterinarianService)
@@ -19,6 +19,10 @@ export const veterinarianController = new Elysia({prefix: "/veterinarians"})
     .put('/:id', async ({service, params, body, error}) =>
         await service.update(params.id, body) ?? error(404, {message: "Not found"}),
         putVeterinarianSchema
+    )
+    .patch('/:id', async ({service, params, body, error}) =>
+        await service.update(params.id, body) ?? error(404, {message: "Not found"}),
+        patchVeterinarianSchema
     )
     .delete('/:id', async ({service, params, error}) =>
         await service.delete(params.id) ?? error(404, {message: "Not found"}),

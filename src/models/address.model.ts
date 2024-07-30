@@ -1,21 +1,21 @@
 import { prop } from "@typegoose/typegoose"
 
 export class Address {
-    @prop()
+    @prop({required: true})
     country!: string
 
-    @prop()
+    @prop({required: true})
     postalCode!: string
 
-    @prop()
+    @prop({required: true})
     street!: string
 
-    @prop()
+    @prop({required: true})
     number?: number
 
-    @prop()
+    @prop({required: true})
     city!: string
 
-    @prop()
+    @prop({required: true})
     state!: string
 }

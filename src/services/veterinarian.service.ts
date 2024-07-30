@@ -1,9 +1,10 @@
 import moment from "moment";
 import { Veterinarian, VeterinarianModel, VeterinarianWithId } from "../models/veterinarian.model";
 import { isObjectIdOrHexString, Types } from "mongoose";
+import { PartialVeterinarian } from "../dto/veterinarian.dto";
 
-function sanitize<T extends {_id: Types.ObjectId}>(obj: T | null) {
-    if (obj == null) { return null }
+function sanitize<T extends {_id: Types.ObjectId}>(obj: T | null | undefined) {
+    if (!obj) { return null }
     const {_id, ...props} = obj
     return {...props, id: obj._id.toString()}
 }
@@ -28,7 +29,7 @@ export class VeterinarianService {
     async findById(id: string) {
         if (!isObjectIdOrHexString(id)) { return null }
         const vet = await VeterinarianModel.findOne({_id: id, deletedAt: undefined}).lean()
-        return vet as VeterinarianWithId | null
+        return sanitize(vet) as VeterinarianWithId | null
     }
 
     async create(veterinarian: Veterinarian) {
@@ -36,12 +37,18 @@ export class VeterinarianService {
         return sanitize(vet) as VeterinarianWithId | null
     }
 
-    async update(id: string, veterinarian: Veterinarian) {
+    async update(id: string, veterinarian: PartialVeterinarian) {
         if (!isObjectIdOrHexString(id)) { return null }
-        const vet = await VeterinarianModel.findOneAndUpdate(
-            {_id: id, deletedAt: undefined}, veterinarian, {new: true}
-        ).lean()
-        return sanitize(vet) as VeterinarianWithId | null
+        const { address, ...vet } = veterinarian
+        let newVet = await VeterinarianModel.findOneAndUpdate(
+            {_id: id, deletedAt: undefined}, vet, {new: true}
+        )
+        if (newVet && address) {
+            const newAddress = {...newVet?.address, ...address}
+            newVet.address = newAddress
+            await newVet.save()
+        }
+        return sanitize(newVet?.toObject()) as VeterinarianWithId | null
     }
 
     async delete(id: string) {

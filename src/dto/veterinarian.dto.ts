@@ -1,4 +1,4 @@
-import { t } from "elysia"
+import { Static, t } from "elysia"
 import { addressDto, notFoundDto, paginationDto, validationErrorDto } from "."
 
 export const veterinarianDto = t.Object({
@@ -8,17 +8,26 @@ export const veterinarianDto = t.Object({
     phone: t.String()
 })
 
-export const veterinarianArrayDto = t.Array(veterinarianDto)
+export const partialVeterinarianDto = t.Partial(
+    t.Composite([
+        t.Omit(veterinarianDto, ['address']),
+        t.Object({address: t.Partial(addressDto)})
+    ])
+)
 
-export const veterinariansPageDto = t.Object({
-    pagination: paginationDto,
-    results: veterinarianArrayDto
-})
+export type PartialVeterinarian = Static<typeof partialVeterinarianDto>
 
 export const veterinarianWithIdDto = t.Composite([
     veterinarianDto,
     t.Object({id: t.String()})
 ])
+
+export const veterinarianArrayDto = t.Array(veterinarianDto)
+
+export const veterinariansPageDto = t.Object({
+    pagination: paginationDto,
+    results: t.Array(veterinarianWithIdDto)
+})
 
 export const getVeterinariansResponseDto = {
     200: veterinariansPageDto
