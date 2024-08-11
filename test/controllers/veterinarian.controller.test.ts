@@ -129,6 +129,14 @@ describe('Put', () => {
         expect(data).toStrictEqual(vet)
         expect(status).toBe(200)
     })
+    it('returns 404 when veterinarian does not exists', async () => {
+        const vet = createRandomVeterinarian()
+        const body = {...vet, _id: undefined}
+        veterinarianService.update = async (id, veterinarian) => null
+        
+        const { status } = await api.veterinarians[vet.id].put(body)
+        expect(status).toBe(404)
+    })
     it('returns 422 when required fields are missing', async () => {
         const vet = createRandomVeterinarian()
         const body = {...vet, id: undefined, name: undefined}
@@ -141,6 +149,32 @@ describe('Put', () => {
         const body = {...vet, id: undefined, email: "invalid"}
 
         const { status } = await api.veterinarians[vet.id].put(body)
+        expect(status).toBe(422)
+    })
+})
+describe('Patch', () => {
+    it('returns 200 with updated veterinarian', async () => {
+        const vet = createRandomVeterinarian()
+        const body = {...vet, _id: undefined, email: undefined}
+        veterinarianService.update = async (id, veterinarian) => vet
+
+        const { data, status } = await api.veterinarians[vet.id].patch(body)
+        expect(data).toStrictEqual(vet)
+        expect(status).toBe(200)
+    })
+    it('returns 404 when veterinarian does not exists', async () => {
+        const vet = createRandomVeterinarian()
+        const body = {...vet, _id: undefined}
+        veterinarianService.update = async (id, veterinarian) => null
+        
+        const { status } = await api.veterinarians[vet.id].patch(body)
+        expect(status).toBe(404)
+    })
+    it('returns 422 when email is invalid', async () => {
+        const vet = createRandomVeterinarian()
+        const body = {...vet, id: undefined, email: "invalid"}
+
+        const { status } = await api.veterinarians[vet.id].patch(body)
         expect(status).toBe(422)
     })
 })
