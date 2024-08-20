@@ -37,7 +37,15 @@ export class VeterinarianService {
         return sanitize(vet) as VeterinarianWithId | null
     }
 
-    async update(id: string, veterinarian: PartialVeterinarian) {
+    async update(id: string, veterinarian: Veterinarian) {
+        if (!isObjectIdOrHexString(id)) { return null }
+        const newVet = await VeterinarianModel.findOneAndUpdate(
+            {_id: id, deletedAt: undefined}, veterinarian, {new: true}
+        )
+        return sanitize(newVet?.toObject()) as VeterinarianWithId | null
+    }
+
+    async updatePartially(id: string, veterinarian: PartialVeterinarian) {
         if (!isObjectIdOrHexString(id)) { return null }
         const { address, ...vet } = veterinarian
         let newVet = await VeterinarianModel.findOneAndUpdate(

@@ -156,7 +156,7 @@ describe('Patch', () => {
     it('returns 200 with updated veterinarian', async () => {
         const vet = createRandomVeterinarian()
         const body = {...vet, _id: undefined, email: undefined}
-        veterinarianService.update = async (id, veterinarian) => vet
+        veterinarianService.updatePartially = async (id, veterinarian) => vet
 
         const { data, status } = await api.veterinarians[vet.id].patch(body)
         expect(data).toStrictEqual(vet)
@@ -165,7 +165,7 @@ describe('Patch', () => {
     it('returns 404 when veterinarian does not exists', async () => {
         const vet = createRandomVeterinarian()
         const body = {...vet, _id: undefined}
-        veterinarianService.update = async (id, veterinarian) => null
+        veterinarianService.updatePartially = async (id, veterinarian) => null
         
         const { status } = await api.veterinarians[vet.id].patch(body)
         expect(status).toBe(404)

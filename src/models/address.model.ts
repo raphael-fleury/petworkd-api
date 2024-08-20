@@ -10,8 +10,8 @@ export class Address {
     @prop({required: true})
     street!: string
 
-    @prop({required: true})
-    number?: number
+    @prop()
+    number!: number | null
 
     @prop({required: true})
     city!: string

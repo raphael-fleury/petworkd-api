@@ -21,7 +21,7 @@ export const veterinarianController = new Elysia({prefix: "/veterinarians"})
         putVeterinarianSchema
     )
     .patch('/:id', async ({service, params, body, error}) =>
-        await service.update(params.id, body) ?? error(404, {message: "Not found"}),
+        await service.updatePartially(params.id, body) ?? error(404, {message: "Not found"}),
         patchVeterinarianSchema
     )
     .delete('/:id', async ({service, params, error}) =>
