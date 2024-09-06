@@ -61,9 +61,10 @@ export class VeterinarianService {
 
     async delete(id: string) {
         if (!isObjectIdOrHexString(id)) { return null }
-        return await VeterinarianModel.findOneAndUpdate(
+        const vet = await VeterinarianModel.findOneAndUpdate(
             {_id: id, deletedAt: undefined}, {deletedAt: moment().format()}
-        ).lean() as VeterinarianWithId | null
+        ).lean()
+        return sanitize(vet) as VeterinarianWithId | null
     }
 }
 
